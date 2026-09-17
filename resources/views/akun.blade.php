@@ -303,6 +303,77 @@
         align-items: center;
         gap: 8px;
     }
+
+    /* Member QR & Barcode Modal */
+    .qr-modal-backdrop {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 16px;
+    }
+    .qr-modal-card {
+        background: #ffffff;
+        width: 100%;
+        max-width: 380px;
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+    }
+    @keyframes modalPop {
+        from { opacity: 0; transform: scale(0.92) translateY(10px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-close-btn {
+        background: #f1f5f9;
+        border: none;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #64748b;
+        transition: all 0.15s;
+    }
+    .modal-close-btn:hover {
+        background: #e2e8f0;
+        color: #0f172a;
+    }
+    .qr-code-box {
+        background: #ffffff;
+        padding: 14px;
+        border-radius: 16px;
+        border: 2px dashed #cbd5e1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 180px;
+        min-height: 180px;
+    }
+    .barcode-box {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 8px 12px;
+        border: 1px solid #e2e8f0;
+    }
 </style>
 @endpush
 
@@ -435,15 +506,112 @@
         Lencana Prestasi <i class="fa-solid fa-gem" style="color: #fbbf24; font-size: 1rem;"></i>
     </div>
     
+    <!-- Digital Pass Modal -->
+    <div id="member-qr-modal" class="qr-modal-backdrop" style="display: none;">
+        <div class="qr-modal-card">
+            <button type="button" id="btn-close-member-qr" class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;">&times;</button>
+            
+            <div style="text-align: center; margin-top: 6px;">
+                <div style="font-size: 0.7rem; font-weight: 800; color: var(--primary); letter-spacing: 1px;">KARTU PERPUSTAKAAN DIGITAL</div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: #1e1b4b; margin: 4px 0 2px 0;">{{ $user->name }}</h3>
+                <p style="font-size: 0.75rem; color: #64748b; margin: 0;">{{ $user->school_name }}</p>
+            </div>
+
+            <!-- QR Code Display -->
+            <div class="qr-code-box">
+                <div id="qrcode-display"></div>
+            </div>
+
+            <!-- Barcode Display -->
+            <div class="barcode-box">
+                <svg id="barcode-display" style="max-width: 100%; height: 45px;"></svg>
+                <span style="font-size: 0.7rem; font-weight: 700; color: #475569; letter-spacing: 1px; margin-top: 2px;">
+                    BZ-{{ substr($user->nis, 0, 4) }}-{{ substr($user->nis, 4) }}-01
+                </span>
+            </div>
+
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 10px 14px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; text-align: center; width: 100%;">
+                <i class="fa-solid fa-circle-check"></i> Siap di-scan di Fast Pass Login & Gerbang Perpus
+            </div>
+
+            <button type="button" id="btn-copy-nis" class="btn btn-primary" style="width: 100%; border-radius: 12px; padding: 12px; font-size: 0.85rem; gap: 8px;">
+                <i class="fa-regular fa-copy"></i> Salin NIS ({{ $user->nis }})
+            </button>
+        </div>
+    </div>
+
 </div>
 
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const qrBtn = document.querySelector('.btn-show-qr');
-        if(qrBtn) {
+        const memberModal = document.getElementById('member-qr-modal');
+        const btnCloseMemberQr = document.getElementById('btn-close-member-qr');
+        const btnCopyNis = document.getElementById('btn-copy-nis');
+        let qrGenerated = false;
+
+        if (qrBtn) {
             qrBtn.addEventListener('click', function() {
-                alert('Menampilkan Barcode & QR Code Digital Anda...');
+                memberModal.style.display = 'flex';
+
+                if (!qrGenerated) {
+                    // Generate QR Code
+                    const qrContainer = document.getElementById('qrcode-display');
+                    qrContainer.innerHTML = '';
+                    if (typeof QRCode !== 'undefined') {
+                        new QRCode(qrContainer, {
+                            text: "{{ $user->nis }}",
+                            width: 160,
+                            height: 160,
+                            colorDark: "#1e1b4b",
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                    }
+
+                    // Generate Barcode
+                    try {
+                        if (typeof JsBarcode !== 'undefined') {
+                            JsBarcode("#barcode-display", "BZ-{{ substr($user->nis, 0, 4) }}-{{ substr($user->nis, 4) }}-01", {
+                                format: "CODE128",
+                                displayValue: false,
+                                height: 40,
+                                margin: 0,
+                                lineColor: "#1e1b4b"
+                            });
+                        }
+                    } catch(e) {
+                        console.warn("JsBarcode error:", e);
+                    }
+
+                    qrGenerated = true;
+                }
+            });
+        }
+
+        if (btnCloseMemberQr) {
+            btnCloseMemberQr.addEventListener('click', () => {
+                memberModal.style.display = 'none';
+            });
+        }
+        if (memberModal) {
+            memberModal.addEventListener('click', (e) => {
+                if(e.target === memberModal) memberModal.style.display = 'none';
+            });
+        }
+
+        if (btnCopyNis) {
+            btnCopyNis.addEventListener('click', function() {
+                navigator.clipboard.writeText("{{ $user->nis }}").then(() => {
+                    const original = btnCopyNis.innerHTML;
+                    btnCopyNis.innerHTML = '<i class="fa-solid fa-check"></i> NIS Tersalin!';
+                    setTimeout(() => {
+                        btnCopyNis.innerHTML = original;
+                    }, 1500);
+                }).catch(() => {
+                    alert('NIS: {{ $user->nis }}');
+                });
             });
         }
         

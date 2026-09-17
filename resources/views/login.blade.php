@@ -248,6 +248,209 @@
         margin-left: -10px;
     }
     .avatar-group img:first-child { margin-left: 0; }
+
+    /* Interactive Scanner Card */
+    .scanner-card {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        user-select: none;
+    }
+    .scanner-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+    }
+    .scanner-card:active {
+        transform: scale(0.98);
+    }
+
+    /* Scanner Modal */
+    .scanner-modal-backdrop {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 16px;
+    }
+    .scanner-modal-card {
+        background: #ffffff;
+        width: 100%;
+        max-width: 400px;
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+    }
+    @keyframes modalPop {
+        from { opacity: 0; transform: scale(0.92) translateY(10px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .scanner-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .modal-icon-badge {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #e0e7ff;
+        color: #4f46e5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+    .modal-close-btn {
+        background: #f1f5f9;
+        border: none;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #64748b;
+        transition: all 0.15s;
+    }
+    .modal-close-btn:hover {
+        background: #e2e8f0;
+        color: #0f172a;
+    }
+    .scanner-viewport-wrapper {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        max-height: 270px;
+        background: #090d16;
+        border-radius: 18px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .qr-reader-box {
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+    }
+    .qr-reader-box video {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+    #qr-reader__scan_region {
+        background: transparent !important;
+    }
+    #qr-reader__dashboard {
+        display: none !important;
+    }
+    .scanner-target-frame {
+        position: absolute;
+        top: 15%;
+        left: 15%;
+        right: 15%;
+        bottom: 15%;
+        pointer-events: none;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+    }
+    .target-corner {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-color: #22d3a3;
+        border-style: solid;
+    }
+    .target-tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; border-top-left-radius: 8px; }
+    .target-tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; border-top-right-radius: 8px; }
+    .target-bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; border-bottom-left-radius: 8px; }
+    .target-br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; border-bottom-right-radius: 8px; }
+    .laser-scanner {
+        position: absolute;
+        left: 5%;
+        right: 5%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #22d3a3, #38bdf8, #22d3a3, transparent);
+        box-shadow: 0 0 12px #22d3a3, 0 0 6px #38bdf8;
+        animation: laserPulse 1.8s infinite ease-in-out alternate;
+    }
+    @keyframes laserPulse {
+        0% { top: 5%; opacity: 0.2; }
+        50% { opacity: 1; }
+        100% { top: 95%; opacity: 0.2; }
+    }
+    .scanner-status-text {
+        font-size: 0.78rem;
+        color: #64748b;
+        text-align: center;
+        font-weight: 600;
+        min-height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    .scanner-alert-box {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 10px 14px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .scanner-alert-danger {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+    .scanner-alert-success {
+        background: #dcfce7;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+    }
+    .scanner-modal-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+    }
+    .scanner-action-btn {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 8px 6px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #334155;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+    .scanner-action-btn:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+    .scanner-action-btn.demo-btn {
+        background: #f5f3ff;
+        border-color: #ddd6fe;
+        color: #6d28d9;
+    }
+    .scanner-action-btn.demo-btn:hover {
+        background: #ede9fe;
+    }
 </style>
 @endpush
 
@@ -260,7 +463,7 @@
         </div>
         <div>
             <div style="display: flex; align-items: center; gap: 8px;">
-                <h1 class="text-xl font-bold text-primary" style="margin: 0; letter-spacing: 1px;">LIBRAZ</h1>
+                <h1 class="text-xl font-bold text-primary" style="margin: 0; letter-spacing: 1px;">BiblioZ</h1>
                 <span style="background: #22c55e; color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 8px; font-weight: bold;">v2.4</span>
             </div>
             <p class="text-sm text-muted" style="margin: 4px 0 0 0;">Level up your reading game ⚡ 📚</p>
@@ -434,6 +637,53 @@
             <i class="fa-solid fa-chart-line"></i>
         </div>
     </div>
+
+    <!-- Scanner Modal -->
+    <div id="qr-modal" class="scanner-modal-backdrop" style="display: none;">
+        <div class="scanner-modal-card">
+            <div class="scanner-modal-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="modal-icon-badge"><i class="fa-solid fa-qrcode"></i></div>
+                    <div>
+                        <h3 style="font-size: 1rem; font-weight: 700; margin: 0; color: #1e1b4b;">Fast Pass Scanner</h3>
+                        <p style="font-size: 0.72rem; color: #6b7280; margin: 0;">Arahkan kamera ke QR / Barcode kartu</p>
+                    </div>
+                </div>
+                <button type="button" id="btn-close-scanner" class="modal-close-btn">&times;</button>
+            </div>
+
+            <div class="scanner-viewport-wrapper">
+                <div id="qr-reader" class="qr-reader-box"></div>
+                <div class="scanner-target-frame">
+                    <div class="target-corner target-tl"></div>
+                    <div class="target-corner target-tr"></div>
+                    <div class="target-corner target-bl"></div>
+                    <div class="target-corner target-br"></div>
+                    <div class="laser-scanner"></div>
+                </div>
+            </div>
+
+            <div id="scanner-status" class="scanner-status-text">
+                <i class="fa-solid fa-circle-notch fa-spin"></i> Menyiapkan kamera...
+            </div>
+
+            <div id="scanner-alert" class="scanner-alert-box" style="display: none;"></div>
+
+            <div class="scanner-modal-actions">
+                <button type="button" id="btn-switch-camera" class="scanner-action-btn">
+                    <i class="fa-solid fa-camera-rotate"></i> Ganti Kamera
+                </button>
+                <label class="scanner-action-btn" style="cursor: pointer; margin: 0;">
+                    <i class="fa-solid fa-image"></i> Unggah Gambar
+                    <input type="file" id="qr-file-input" accept="image/*" style="display: none;">
+                </label>
+                <button type="button" id="btn-demo-scan" class="scanner-action-btn demo-btn" title="Uji coba Fast Pass tanpa kamera">
+                    <i class="fa-solid fa-bolt"></i> Coba Demo (Nadia)
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @push('scripts')
@@ -510,6 +760,214 @@
                     eyeReg.classList.replace('fa-eye-slash', 'fa-eye');
                 }
             });
+        }
+
+        // ================= QR SCANNER FAST PASS LOGIC =================
+        const qrModal = document.getElementById('qr-modal');
+        const btnCloseScanner = document.getElementById('btn-close-scanner');
+        const scannerStatus = document.getElementById('scanner-status');
+        const scannerAlert = document.getElementById('scanner-alert');
+        const btnSwitchCamera = document.getElementById('btn-switch-camera');
+        const qrFileInput = document.getElementById('qr-file-input');
+        const btnDemoScan = document.getElementById('btn-demo-scan');
+        const nisInputField = document.querySelector('input[name="nis"]');
+
+        let html5QrCode = null;
+        let isScannerRunning = false;
+        let currentFacingMode = "environment";
+        let isProcessingScan = false;
+
+        // Sound Feedback on Scan Success
+        function playSuccessSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(750, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.12);
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } catch (e) {
+                console.warn('Audio context error:', e);
+            }
+        }
+
+        // Open Scanner
+        scannerCard.addEventListener('click', function() {
+            openScanner();
+        });
+
+        function openScanner() {
+            qrModal.style.display = 'flex';
+            scannerAlert.style.display = 'none';
+            scannerStatus.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menghubungkan ke kamera...';
+            isProcessingScan = false;
+
+            if (typeof Html5Qrcode === 'undefined') {
+                scannerStatus.innerHTML = '<span style="color:#ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> Library QR Scanner sedang dimuat...</span>';
+                return;
+            }
+
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("qr-reader");
+            }
+
+            startCamera(currentFacingMode);
+        }
+
+        function startCamera(facingMode) {
+            const config = {
+                fps: 10,
+                qrbox: { width: 220, height: 220 },
+                aspectRatio: 1.0
+            };
+
+            html5QrCode.start(
+                { facingMode: facingMode },
+                config,
+                onScanSuccess,
+                onScanFailure
+            ).then(() => {
+                isScannerRunning = true;
+                scannerStatus.innerHTML = '<i class="fa-solid fa-video" style="color: #22d3a3;"></i> Kamera aktif. Arahkan ke barcode / QR ID.';
+            }).catch(err => {
+                console.warn("Camera start error:", err);
+                isScannerRunning = false;
+                scannerStatus.innerHTML = '<span style="color:#f59e0b;"><i class="fa-solid fa-camera-slash"></i> Kamera tidak aktif/diizinkan. Coba ganti kamera atau gunakan tombol demo.</span>';
+            });
+        }
+
+        function stopCamera() {
+            if (html5QrCode && isScannerRunning) {
+                html5QrCode.stop().then(() => {
+                    isScannerRunning = false;
+                }).catch(err => {
+                    console.warn("Error stopping scanner:", err);
+                });
+            }
+        }
+
+        function closeScannerModal() {
+            stopCamera();
+            qrModal.style.display = 'none';
+            isProcessingScan = false;
+        }
+
+        btnCloseScanner.addEventListener('click', closeScannerModal);
+        qrModal.addEventListener('click', function(e) {
+            if (e.target === qrModal) {
+                closeScannerModal();
+            }
+        });
+
+        // Switch Camera (Front/Back)
+        btnSwitchCamera.addEventListener('click', function() {
+            if (html5QrCode && isScannerRunning) {
+                currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
+                html5QrCode.stop().then(() => {
+                    isScannerRunning = false;
+                    scannerStatus.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Berganti kamera...';
+                    startCamera(currentFacingMode);
+                }).catch(err => console.error(err));
+            } else {
+                currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
+                startCamera(currentFacingMode);
+            }
+        });
+
+        // Upload QR Image
+        qrFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("qr-reader");
+            }
+
+            scannerStatus.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memindai file gambar...';
+
+            html5QrCode.scanFile(file, true)
+                .then(decodedText => {
+                    onScanSuccess(decodedText);
+                })
+                .catch(err => {
+                    showAlert('Tidak dapat menemukan QR Code atau Barcode pada gambar.', false);
+                    scannerStatus.innerHTML = '<span style="color:#ef4444;"><i class="fa-solid fa-circle-xmark"></i> Barcode tidak terbaca di gambar.</span>';
+                });
+        });
+
+        // Demo Scan (Nadia's ID)
+        btnDemoScan.addEventListener('click', function() {
+            scannerStatus.innerHTML = '<i class="fa-solid fa-bolt" style="color: #6366f1;"></i> Mensimulasikan scan kartu Nadia...';
+            onScanSuccess("2024108827");
+        });
+
+        // Scan Callbacks
+        function onScanSuccess(decodedText) {
+            if (isProcessingScan) return;
+            isProcessingScan = true;
+
+            playSuccessSound();
+            stopCamera();
+
+            scannerStatus.innerHTML = '<i class="fa-solid fa-circle-check" style="color: #22c55e;"></i> Berhasil terbaca: <b>' + decodedText + '</b>';
+            showAlert('Memverifikasi kartu pelajar ke server...', true);
+
+            // Also fill the NIS input in case user switches to manual
+            if (nisInputField) {
+                let cleanNis = decodedText;
+                if(decodedText.includes('BZ-')) {
+                    const parts = decodedText.split('-');
+                    if(parts.length >= 3) cleanNis = parts[1] + parts[2];
+                }
+                nisInputField.value = cleanNis;
+            }
+
+            // Post to backend
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+
+            fetch("{{ route('login.qr') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({ qr_data: decodedText })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('✨ ' + data.message + ' Mengalihkan...', true);
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 800);
+                } else {
+                    showAlert(data.message || 'Kartu tidak valid.', false);
+                    isProcessingScan = false;
+                    scannerStatus.innerHTML = '<span style="color:#ef4444;"><i class="fa-solid fa-circle-xmark"></i> Kartu ditolak.</span>';
+                }
+            })
+            .catch(err => {
+                console.error("Login QR error:", err);
+                showAlert('Terjadi gangguan saat menghubungi server perpustakaan.', false);
+                isProcessingScan = false;
+            });
+        }
+
+        function onScanFailure(error) {
+            // Continuously scanning, ignore normal per-frame misses
+        }
+
+        function showAlert(msg, isSuccess) {
+            scannerAlert.style.display = 'block';
+            scannerAlert.className = 'scanner-alert-box ' + (isSuccess ? 'scanner-alert-success' : 'scanner-alert-danger');
+            scannerAlert.innerHTML = (isSuccess ? '<i class="fa-solid fa-circle-check"></i> ' : '<i class="fa-solid fa-circle-exclamation"></i> ') + msg;
         }
     });
 </script>

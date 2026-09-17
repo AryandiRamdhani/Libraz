@@ -41,6 +41,12 @@ class LibraryController extends Controller
         return view('akun', compact('user'));
     }
 
+    public function akunPengaturan()
+    {
+        $user = Auth::user();
+        return view('akun_pengaturan', compact('user'));
+    }
+
     public function scanBook(Request $request)
     {
         $code = trim($request->input('code', ''));

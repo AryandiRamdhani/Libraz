@@ -15,7 +15,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/katalog', [LibraryController::class, 'katalog'])->name('katalog');
     Route::get('/sirkulasi', [LibraryController::class, 'sirkulasi'])->name('sirkulasi');
     Route::post('/sirkulasi/scan-book', [LibraryController::class, 'scanBook'])->name('sirkulasi.scan');
+    Route::get('/scanner', function () { return view('scanner'); })->name('scanner');
     Route::get('/statistik', [LibraryController::class, 'statistik'])->name('statistik');
     Route::get('/akun', [LibraryController::class, 'akun'])->name('akun');
+    Route::get('/akun/pengaturan', [LibraryController::class, 'akunPengaturan'])->name('akun.pengaturan');
 });
 
